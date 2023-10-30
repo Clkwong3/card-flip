@@ -1,58 +1,71 @@
-// Get the reset button element
+// Get the "Reset Game" button element from the HTML
 const resetButton = document.querySelector(".reset");
 
-// Define the array of Halloween emojis
+// Define an array of Halloween-themed emojis
 const halloweenEmojis = [
-  "🎃", "🎃", "👻", "👻", "🦇", "🦇", "🕷️", "🕷️", "🕸️", "🕸️",
-  "🍬", "🍬", "🕯️", "🕯️", "🧙‍♀️", "🧙‍♀️", "🧛‍♂️", "🧛‍♂️", "🧟‍♂️", "🧟‍♂️",
-  "🦴", "🦴", "🎭", "🎭", "🍁", "🍁", "🌙", "🌙"
+  "🎃", "🎃", "👻", "👻", "🦇", "🦇", "🕷️", "🕷️", "🕸️", "🕸️", "🍬", "🍬",
+  "🕯️", "🕯️", "🧙‍♀️", "🧙‍♀️", "🧛‍♂️", "🧛‍♂️", "🧟‍♂️", "🧟‍♂️", "🦴", "🦴",
+  "🎭", "🎭", "🍁", "🍁", "🌙", "🌙"
 ];
 
-// Shuffle the emojis array using the Fisher-Yates algorithm
+// Shuffle the emojis array using a function
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
 shuffleArray(halloweenEmojis);
 
-// Create the cards
-const cardGame = document.querySelector(".card-game");
-
+// Create and display cards with emojis
 for (let i = 0; i < halloweenEmojis.length; i++) {
   const card = document.createElement("div");
   card.classList.add("emoji-card");
-  card.textContent = halloweenEmojis[i];
+  card.innerHTML = halloweenEmojis[i];
 
+  // Add a click event listener to the card
   card.addEventListener("click", () => {
-    card.classList.add("card-turn");
-    const turnedCards = document.querySelectorAll(".card-turn");
-
-    if (turnedCards.length === 2) {
-      const [firstCard, secondCard] = turnedCards;
-
-      if (firstCard.textContent === secondCard.textContent) {
-        firstCard.classList.add("card-match");
-        secondCard.classList.add("card-match");
-      }
-
-      setTimeout(() => {
-        turnedCards.forEach(card => card.classList.remove("card-turn"));
-        const matchedCards = document.querySelectorAll(".card-match");
-
-        if (matchedCards.length === halloweenEmojis.length) {
-          alert("You win!");
-        }
-      }, 500);
+    // Check if there are already two turned cards
+    if (document.querySelectorAll(".card-turn").length === 2) {
+      // If there are two turned cards, do nothing
+      return;
     }
+
+    // Add the "card-turn" class to the clicked card
+    card.classList.add("card-turn");
+
+    setTimeout(function () {
+      // Check if there are two turned cards
+      if (document.querySelectorAll(".card-turn").length === 2) {
+        // Check if the two turned cards match
+        if (document.querySelectorAll(".card-turn")[0].innerHTML === document.querySelectorAll(".card-turn")[1].innerHTML) {
+          // Mark them as matched
+          document.querySelectorAll(".card-turn")[0].classList.add("card-match");
+          document.querySelectorAll(".card-turn")[1].classList.add("card-match");
+
+          // Remove the "card-turn" class from matched cards
+          document.querySelectorAll(".card-turn")[1].classList.remove("card-turn");
+          document.querySelectorAll(".card-turn")[0].classList.remove("card-turn");
+
+          // Check if all cards are matched, then display a win alert
+          if (document.querySelectorAll(".card-match").length === halloweenEmojis.length) {
+            alert("You win!");
+          }
+        } else {
+          // If the cards don't match, turn them back
+          document.querySelectorAll(".card-turn")[1].classList.remove("card-turn");
+          document.querySelectorAll(".card-turn")[0].classList.remove("card-turn");
+        }
+      }
+    }, 800);
   });
 
-  cardGame.appendChild(card);
+  // Append the card to the game container
+  document.querySelector(".card-game").appendChild(card);
 }
 
-// Add an event listener to reset the game when the "Reset" button is clicked
+// Add an event listener for the "Reset Game" button
 resetButton.addEventListener("click", () => {
-  location.reload();
+  // Reload the page when the button is clicked to reset the game
+  window.location.reload();
 });

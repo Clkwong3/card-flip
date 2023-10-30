@@ -1,3 +1,4 @@
+/* Reset default margin, padding, and box-sizing for all elements */
 * {
   margin: 0;
   padding: 0;
@@ -5,6 +6,7 @@
   font-family: "Gill Sans", "Gill Sans MT", "Trebuchet MS", sans-serif;
 }
 
+/* Style the body with a background gradient and center the content vertically and horizontally */
 body {
   display: flex;
   justify-content: center;
@@ -13,6 +15,7 @@ body {
   background: linear-gradient(to bottom, #d42d10, #5200f5);
 }
 
+/* Style the container that holds the game */
 .container {
   position: relative;
   display: flex;
@@ -24,12 +27,14 @@ body {
   padding: 40px 60px;
 }
 
+/* Style the game title */
 .container h1 {
   font-size: 3em;
   letter-spacing: 3px;
   text-shadow: 2px 2px 4px #f3ecec;
 }
 
+/* Style the "Reset Game" button */
 .reset {
   padding: 15px 20px;
   color: #096709;
@@ -41,11 +46,13 @@ body {
   font-weight: 600;
 }
 
+/* Change button colors when focused */
 .reset:focus {
   color: #ffffff;
   background-color: #096709;
 }
 
+/* Style the game board containing the cards */
 .card-game {
   width: 800px;
   height: 800px;
@@ -56,6 +63,7 @@ body {
   perspective: 540px;
 }
 
+/* Style individual card elements */
 .emoji-card {
   position: relative;
   width: 100px;
@@ -69,6 +77,7 @@ body {
   transition: 0.25s;
 }
 
+/* Style the back side of the cards */
 .emoji-card::after {
   content: "";
   position: absolute;
@@ -79,11 +88,13 @@ body {
   backface-visibility: hidden;
 }
 
+/* Apply a rotation effect when a card is turned */
 .emoji-card.card-turn {
   transform: rotateY(0deg);
 }
 
-.card-turn::after,
-.card-match::after {
+/* Apply a rotation effect to matched cards */
+.emoji-card.card-turn::after,
+.emoji-card.card-match::after {
   transform: rotateY(180deg);
 }
