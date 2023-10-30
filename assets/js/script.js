@@ -1,64 +1,58 @@
-const resetBtn = document.querySelector(".reset");
+// Get the reset button element
+const resetButton = document.querySelector(".reset");
 
+// Define the array of Halloween emojis
 const halloweenEmojis = [
-  "🎃", "🎃", "👻", "👻", "🦇", "🦇", "🕷️", "🕷️", "🕸️", "🕸️", "🍬", "🍬",
-  "🕯️", "🕯️", "🧙‍♀️", "🧙‍♀️", "🧛‍♂️", "🧛‍♂️", "🧟‍♂️", "🧟‍♂️", "🦴", "🦴",
-  "🎭", "🎭", "🍁", "🍁", "🌙", "🌙",
+  "🎃", "🎃", "👻", "👻", "🦇", "🦇", "🕷️", "🕷️", "🕸️", "🕸️",
+  "🍬", "🍬", "🕯️", "🕯️", "🧙‍♀️", "🧙‍♀️", "🧛‍♂️", "🧛‍♂️", "🧟‍♂️", "🧟‍♂️",
+  "🦴", "🦴", "🎭", "🎭", "🍁", "🍁", "🌙", "🌙"
 ];
 
-let turnedCards = []; // To store the turned cards
-let canClick = true; // To prevent clicking on more than two cards at once
-
-// Shuffle the emojis array
-const shuffle = halloweenEmojis.sort(() => Math.random() - 0.5);
-
-// Card Creation
-for (let i = 0; i < halloweenEmojis.length; i++) {
-  const cards = document.createElement("div");
-  cards.classList = "emoji-cards";
-  cards.innerHTML = shuffle[i];
-
-  cards.onclick = function () {
-    // Check if we can click (not already turned two cards)
-    if (canClick) {
-      // Check if the card is not already matched or turned
-      if (!this.classList.contains("card-match") && !this.classList.contains("card-turn")) {
-        this.classList.add("card-turn");
-        turnedCards.push(this);
-
-        // Check if we have turned two cards
-        if (turnedCards.length === 2) {
-          canClick = false; // Disable further clicks until we process the cards
-
-          // Check if the two turned cards match
-          if (turnedCards[0].innerHTML === turnedCards[1].innerHTML) {
-            // If they match, add the "card-match" class to both cards
-            turnedCards[0].classList.add("card-match");
-            turnedCards[1].classList.add("card-match");
-            turnedCards = []; // Reset the turned cards array
-
-            // Check if all cards are matched to determine a win
-            if (document.querySelectorAll(".card-match").length === halloweenEmojis.length) {
-              alert("You win!");
-            }
-          } else {
-            // If they don't match, flip them back down after a delay
-            setTimeout(function () {
-              turnedCards[0].classList.remove("card-turn");
-              turnedCards[1].classList.remove("card-turn");
-              turnedCards = []; // Reset the turned cards array
-              canClick = true; // Enable clicking again
-            }, 500);
-          }
-        }
-      }
-    }
-  };
-
-  document.querySelector(".card-game").appendChild(cards);
+// Shuffle the emojis array using the Fisher-Yates algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
 
-// Add an event listener for the "Reset Game" button
-resetBtn.addEventListener("click", () => {
-  window.location.reload(); // Reload the page when the button is clicked
+shuffleArray(halloweenEmojis);
+
+// Create the cards
+const cardGame = document.querySelector(".card-game");
+
+for (let i = 0; i < halloweenEmojis.length; i++) {
+  const card = document.createElement("div");
+  card.classList.add("emoji-card");
+  card.textContent = halloweenEmojis[i];
+
+  card.addEventListener("click", () => {
+    card.classList.add("card-turn");
+    const turnedCards = document.querySelectorAll(".card-turn");
+
+    if (turnedCards.length === 2) {
+      const [firstCard, secondCard] = turnedCards;
+
+      if (firstCard.textContent === secondCard.textContent) {
+        firstCard.classList.add("card-match");
+        secondCard.classList.add("card-match");
+      }
+
+      setTimeout(() => {
+        turnedCards.forEach(card => card.classList.remove("card-turn"));
+        const matchedCards = document.querySelectorAll(".card-match");
+
+        if (matchedCards.length === halloweenEmojis.length) {
+          alert("You win!");
+        }
+      }, 500);
+    }
+  });
+
+  cardGame.appendChild(card);
+}
+
+// Add an event listener to reset the game when the "Reset" button is clicked
+resetButton.addEventListener("click", () => {
+  location.reload();
 });

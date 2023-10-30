@@ -1,6 +1,6 @@
 * {
-  margin: 0%;
-  padding: 0%;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: "Gill Sans", "Gill Sans MT", "Trebuchet MS", sans-serif;
 }
@@ -24,7 +24,6 @@ body {
   padding: 40px 60px;
 }
 
-/* Eventually try to animate the letters to flip */
 .container h1 {
   font-size: 3em;
   letter-spacing: 3px;
@@ -42,7 +41,6 @@ body {
   font-weight: 600;
 }
 
-/* color swap when button clicked */
 .reset:focus {
   color: #ffffff;
   background-color: #096709;
@@ -58,7 +56,7 @@ body {
   perspective: 540px;
 }
 
-.emoji-cards {
+.emoji-card {
   position: relative;
   width: 100px;
   height: 100px;
@@ -71,18 +69,17 @@ body {
   transition: 0.25s;
 }
 
-.emoji-cards::after {
+.emoji-card::after {
   content: "";
   position: absolute;
   inset: 0;
   background-color: #f69d2a;
   transition: 0.25s;
   transform: rotateY(0deg);
-  /* opacity: 0.85; */
   backface-visibility: hidden;
 }
 
-.emoji-cards.card-turn {
+.emoji-card.card-turn {
   transform: rotateY(0deg);
 }
 
